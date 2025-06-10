@@ -1,5 +1,6 @@
 const express = require('express');
 const fetch = require('node-fetch');
+const { humanizeText } = require('./humanizer');
 
 const app = express();
 app.use(express.json());
@@ -28,6 +29,16 @@ app.post('/', async (req, res) => {
   });
 
   res.sendStatus(200);
+});
+
+// Simple API endpoint to humanize text
+app.post('/humanize', (req, res) => {
+  const { text } = req.body;
+  if (!text) {
+    return res.status(400).json({ error: 'text is required' });
+  }
+  const humanized = humanizeText(text);
+  res.json({ humanized });
 });
 
 const PORT = process.env.PORT || 3000;
